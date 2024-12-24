@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException
-from database.dbQuery import NameTestQuery
 from utils.validatorUtils import NameData
+from controller.nameController import NameController
 
 router = APIRouter(prefix="/api/names")
-query = NameTestQuery()
+controller = NameController()
 
 def handle_response(result):
     """统一处理响应"""
@@ -13,20 +13,25 @@ def handle_response(result):
 
 @router.get("")
 async def get_all_names():
-    return handle_response(query.get_all_names())
+    result = await controller.get_all_names()
+    return handle_response(result)
 
 @router.get("/{id}")
 async def get_name(id: int):
-    return handle_response(query.get_name_by_id(id))
+    result = await controller.get_name_by_id(id)
+    return handle_response(result)
 
 @router.post("")
 async def create_name(data: NameData):
-    return handle_response(query.insert_name(data.dict()))
+    result = await controller.create_name(data)
+    return handle_response(result)
 
 @router.put("/{id}")
 async def update_name(id: int, data: NameData):
-    return handle_response(query.update_name(id, data.dict()))
+    result = await controller.update_name(id, data)
+    return handle_response(result)
 
 @router.delete("/{id}")
 async def delete_name(id: int):
-    return handle_response(query.delete_name(id))
+    result = await controller.delete_name(id)
+    return handle_response(result)
